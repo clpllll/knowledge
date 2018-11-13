@@ -10,6 +10,7 @@
   </header>
 </template>
 <script>
+import '../../api/layout'
   export default {
     data(){
       return{

@@ -1,0 +1,5 @@
+const webpackChain = require('webpack-chain')
+const config = new webpackChain()
+// console.log(config)
+config.resolve.alias.set('util','./src/util')
+module.exports = config.toConfig()
