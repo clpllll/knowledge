@@ -6,6 +6,7 @@
       <Sidebar/>
       <div class="main">
         layout
+        <router-view></router-view>
       </div>
     </div>
   </div>

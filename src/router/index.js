@@ -16,8 +16,21 @@ const _import = ((mode) => {
 
 
 const routes = [
-  { path: '/layout', component: _import('Layout') },
   { path: '/hello', component: hello },
+  {
+    path: '/',
+    component: _import('Layout'),
+    children: [
+      {path:'js/',component:_import('Js')}
+    ]
+  },
+  // {
+  //   path: '/layout',
+  //   component: _import('Layout'),
+  //   children: [
+  //     {path:'js',component:_import('Js')}
+  //   ]
+  // },
   
 ]
 export default new Router({routes})
