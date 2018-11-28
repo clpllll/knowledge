@@ -1,9 +1,11 @@
 <template>
   <div>js
-    <template v-for="item in list">
-      <a v-for="(value,key) in item" v-anchor :key="key" href="javascript:;">
+    <template v-for="(item,count) in list">
+      <h3 :key="count" v-anchor >{{Object.keys(item)[0]}}</h3>
+      <p v-for="(value,key) in item" :key="key" href="javascript:;">
         {{value}}
-        </a>
+        </p>
+      
       
     </template>
   </div>
@@ -28,8 +30,11 @@ import data from './data.js'
   }
 </script>
 <style scoped lang="less">
-  a{
-    display: block;
+h3{
+  cursor: pointer;
+}
+  p{
+    // display: block;
     color:#000;
     height: 400px;
     &:hover{

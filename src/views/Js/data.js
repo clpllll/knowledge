@@ -1,5 +1,6 @@
+import type from './type'
 export default [
-  {"内置类型":"html"},
+  {"内置类型":type},
   {"Typeof":"html"},
   {
     "类型装换": [

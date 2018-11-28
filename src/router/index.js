@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 Vue.use(Router)
 import hello from '../components/HelloWorld.vue'
+import Admin from '../views/Admin'
 const _import = ((mode) => {
   if (mode === 'development') {
     return (path) => {
@@ -24,6 +25,10 @@ const routes = [
       {path:'js/',component:_import('Js')}
     ]
   },
+  {
+    path: "/admin",
+    component:Admin
+  }
   // {
   //   path: '/layout',
   //   component: _import('Layout'),

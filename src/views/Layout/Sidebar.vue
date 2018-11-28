@@ -61,6 +61,7 @@
 </script> 
 <style scpoed lang="less">
   .sidebar{
+    left: 0;
     width: 200px;
     border-right:1px solid #ccc;
     height: 100%;
