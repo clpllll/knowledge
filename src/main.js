@@ -3,6 +3,7 @@ import ElementUi from 'element-ui'
 import App from './App.vue'
 import router from './router/index'
 import '../theme/index.css'
+import './style/markDown.less';
 Vue.use(ElementUi)
 Vue.config.productionTip = false;
 Vue.directive('anchor', {

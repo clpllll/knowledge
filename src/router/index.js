@@ -3,6 +3,7 @@ import Router from 'vue-router'
 Vue.use(Router)
 import hello from '../components/HelloWorld.vue'
 import Admin from '../views/Admin'
+import AddArticle from '../views/Admin/AddArticle'
 const _import = ((mode) => {
   if (mode === 'development') {
     return (path) => {
@@ -15,7 +16,16 @@ const _import = ((mode) => {
   }
 })(process.env.NODE_ENV)
 
-
+const AdminRoutes = [
+  {
+    path: "/admin",
+    component:Admin
+  },
+  {
+    path: "/admin/add",
+    component:AddArticle
+  }
+]
 const routes = [
   { path: '/hello', component: hello },
   {
@@ -25,10 +35,6 @@ const routes = [
       {path:'js/',component:_import('Js')}
     ]
   },
-  {
-    path: "/admin",
-    component:Admin
-  }
   // {
   //   path: '/layout',
   //   component: _import('Layout'),
@@ -38,4 +44,4 @@ const routes = [
   // },
   
 ]
-export default new Router({routes})
+export default new Router({routes:[...AdminRoutes,...routes]})

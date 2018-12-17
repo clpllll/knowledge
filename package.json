@@ -9,6 +9,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "element-ui": "^2.4.9",
+    "github-markdown-css": "^2.10.0",
     "showdown": "^1.9.0",
     "vue": "^2.5.17",
     "vue-router": "^3.0.1",

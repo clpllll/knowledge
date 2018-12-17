@@ -1,44 +1,63 @@
 <template>
-  <div>js
-    <template v-for="(item,count) in list">
-      <h3 :key="count" v-anchor >{{Object.keys(item)[0]}}</h3>
-      <p v-for="(value,key) in item" :key="key" href="javascript:;">
-        {{value}}
-        </p>
-      
-      
-    </template>
+  <div class="knowledge">
+    <transition name="fade" mode="out-in">
+      <!-- <Nav/> -->
+    </transition>
+    <div  v-for="item in list" :key="item._id">
+      <h3  v-anchor >{{item.name}}</h3>
+      <p   v-html="item.content"> </p>
+    </div>
   </div>
 </template>
 <script>
-import data from './data.js'
+import Nav from '../Navbar'
+import { getArticle } from '@/api/layout.js'
   export default {
     data(){
       return{
-        list:data
+        list:[]
       }
+    },
+    mounted(){
+      this.getList()
     },
     computed:{
-      listData(){
-        console.log(this.list)
-        return
+    },
+    filters:{
+      ff:(value)=>{
+        console.log("value")
+        return value
       }
     },
-    method:{
-
+    methods:{
+      getList(){
+        getArticle({type:"js"}).then(res=>{
+          console.log('getArticle',res)
+          this.list = res.data;
+        })
+      }
+    },
+    components:{
+      Nav
     }
   }
 </script>
 <style scoped lang="less">
-h3{
-  cursor: pointer;
-}
+.knowledge{
+  padding:10px 1.5rem;
+  h3{
+    cursor: pointer;
+    padding-bottom:5px;
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 13px;
+    margin-top:20px; 
+  }
   p{
-    // display: block;
     color:#000;
-    height: 400px;
     &:hover{
       color:#000;
     }
   }
+}
+
 </style>

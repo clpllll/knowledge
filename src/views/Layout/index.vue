@@ -5,7 +5,7 @@
     <div class="content">
       <Sidebar/>
       <div class="main">
-        layout
+        <!-- layout -->
         <router-view></router-view>
       </div>
     </div>
@@ -30,6 +30,7 @@ export default {
 </script>
 
 <style scoped lang="less">
+
   .layout{
     width: 100%;
     height: 100%;

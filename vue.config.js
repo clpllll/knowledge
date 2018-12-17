@@ -16,6 +16,7 @@ module.exports = {
     config.resolve
       .alias
       .set('util', './src/uitl')
+      .set('api','./src/api')
       .end()
   },
   devServer: {
