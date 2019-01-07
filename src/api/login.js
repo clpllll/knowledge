@@ -13,3 +13,9 @@ export const register = (params) => {
     data:params
   })
 }
+export const getInfo = () => {
+  return Fetch({
+    url: "/info",
+    method: 'get',
+  })
+}

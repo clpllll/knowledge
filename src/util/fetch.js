@@ -1,9 +1,11 @@
 import Axios from 'axios'
+import { getToken, setToken } from './token';
 const serve = Axios.create({
   baseURL: '/api',
   timeout: 1000 * 60 * 3,
 })
 const reqs = (conf) => {
+  conf.headers= {'X-Auth-token': getToken()}
   return conf
 }
 const reqe = (err) => {

@@ -16,11 +16,15 @@
 <script>
 import NavBar from './NavBar.vue'
 import Sidebar from './Sidebar.vue'
+import { removeToken } from '@/util/token';
 export default {
  data(){
    return{
 
    }
+ },
+ beforeDestroy() {
+   removeToken()
  },
  components:{
    NavBar,

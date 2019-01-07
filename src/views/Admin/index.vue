@@ -45,8 +45,9 @@
   </div>
 </template>
 <script>
-import { login, register } from "@/api/login.js";
+import { login, register, getInfo } from "@/api/login.js";
 import encrypt from "./encrypt.js";
+import { setToken } from '@/util/token';
 export default {
   data() {
     const validatorP = (rule, value, callback) => {
@@ -85,6 +86,10 @@ export default {
           if(type==='login'){
             login(obj).then(res=>{
               console.log(type,res)
+              setToken(res.data.token);
+              getInfo().then(res=>{
+                console.log('getInfo',res)
+              })
             })
             return
           }
