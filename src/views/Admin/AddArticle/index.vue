@@ -17,7 +17,7 @@
       </el-form-item>
         <div class="content">
           <!-- <div class="title">展示</div> -->
-          <div class="box" v-html="content"></div>
+          <div class="box" v-html="content" v-highlight></div>
         </div>
       <el-form-item>
         <el-button type="primary" @click="submitForm('ruleForm')">立即创建</el-button>

@@ -9,7 +9,7 @@
           <i class="el-icon-delete" @click="(event)=>del(event,item._id)"></i>
         </span>
       </a>
-      <p v-html="item.content" > </p>
+      <p v-html="item.content" v-highlight> </p>
     </div>
     <el-dialog
       title="update"
