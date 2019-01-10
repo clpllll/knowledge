@@ -8,6 +8,7 @@
       <el-form-item label="文章类别" prop="type">
         <el-radio v-model="ruleForm.type" label="js">js</el-radio>
         <el-radio v-model="ruleForm.type" label="browser">浏览器</el-radio>
+        <el-radio v-model="ruleForm.type" label="performance">性能</el-radio>
       </el-form-item>
       <el-form-item label="文章名称" prop="name">
         <el-input v-model="ruleForm.name"></el-input>
