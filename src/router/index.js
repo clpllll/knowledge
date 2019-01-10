@@ -24,7 +24,7 @@ const AdminRoutes = [
   {
     path: "/admin/add",
     component:AddArticle
-  }
+  },
 ]
 const routes = [
   { path: '/hello', component: hello },
@@ -32,7 +32,14 @@ const routes = [
     path: '/',
     component: _import('Layout'),
     children: [
-      {path:'js/',component:_import('Js')}
+      {
+        path: 'js/',
+        component: _import('Js'),
+      },
+      {
+        path: '/browser',
+        component: _import('Js'),
+      }
     ]
   },
   // {
@@ -44,4 +51,14 @@ const routes = [
   // },
   
 ]
-export default new Router({routes:[...AdminRoutes,...routes]})
+const router = new Router({
+  mode: 'history',
+  routes: [...AdminRoutes, ...routes],
+  // scrollBehavior (to, from, savedPosition) {
+  //   console.log(to.hash,decodeURIComponent(to.hash))
+  //   if (to.hash) {
+  //     return {selector:decodeURIComponent(to.hash)}
+  //   }
+  // }
+})
+export default router

@@ -1,17 +1,15 @@
 <template>
   <div class="knowledge">
     <transition name="fade" mode="out-in">
-      <!-- <Nav/> -->
     </transition>
     <div  v-for="item in list" :key="item._id"  class="item">
-      <h3  v-anchor > {{item.name}}
+      <a :href="'#'+item.name" :id="setId(item.name)"> {{item.name}}
         <span v-show="token">
           <i class="el-icon-edit" @click="(event)=>edit(event,item)"></i>
           <i class="el-icon-delete" @click="(event)=>del(event,item._id)"></i>
         </span>
-
-      </h3>
-      <p   v-html="item.content"> </p>
+      </a>
+      <p v-html="item.content" > </p>
     </div>
     <el-dialog
       title="update"
@@ -33,32 +31,50 @@ const Showdown = require('showdown')
   export default {
     data(){
       return{
+        main:null,
         list:[],
         dialogVisible:false,
         token:false,
         updateObj:{},
+        type:"",
       }
     },
     beforeMount(){
-      // console.log(getToken())
+      const { path } = this.$route;
+      const type = path.replace('/','')
+      this.getList(type)
     },
     
     mounted(){
       this.token = !!getToken();
-      this.getList()
+      this.main = document.querySelector('.main');
     },
     computed:{
     },
-    filters:{
-      ff:(value)=>{
-        console.log("value")
-        return value
+    watch:{
+      $route(to,from) {
+        if(to.hash) {
+          const id = this.setId(decodeURIComponent(to.hash))
+          this.goAnchor(id)
+        }else {
+          console.log(to)
+          const { path } = this.$route;
+          const type = path.replace('/','')
+          this.getList(type)
+          this.main.scrollTop = 0;
+        }
       }
     },
+    filters:{
+      // ff:(value)=>{
+      //   console.log("value")
+      //   return value
+      // }
+    },
     methods:{
-      getList(){
-        getArticle({type:"js"}).then(res=>{
-          console.log('getArticle',res)
+      getList(type){
+        getArticle({type}).then(res=>{
+          // console.log('getArticle',res)
           this.list = res.data;
         })
       },
@@ -74,14 +90,20 @@ const Showdown = require('showdown')
         e.preventDefault()
         console.log(id)
       },
-      handleClose(done) {
-        this.$confirm('确认关闭？')
-          .then(_ => {
-            done();
-          })
-          .catch(_ => {});
+      // handleClose(done) {
+      //   this.$confirm('确认关闭？')
+      //     .then(_ => {
+      //       done();
+      //     })
+      //     .catch(_ => {});
+      // },
+      goAnchor(selector) {
+        const anchor = document.querySelector(selector)
+        this.main.scrollTop = anchor.offsetTop - 50;
+      },
+      setId(str){
+        return str.replace(/,|\.|\+|!|=|\s+/g,'')
       }
-
     },
     components:{
       Nav
@@ -92,11 +114,7 @@ const Showdown = require('showdown')
 .knowledge{
   padding:10px 1.5rem;
   .item{
-    // position: relative;
     span{
-      // position: absolute;
-      // right: 10px;
-      // top: 0;
       i{
         cursor: pointer;
         margin-left: 10px;

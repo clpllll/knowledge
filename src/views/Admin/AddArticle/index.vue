@@ -7,7 +7,7 @@
     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
       <el-form-item label="文章类别" prop="type">
         <el-radio v-model="ruleForm.type" label="js">js</el-radio>
-        <el-radio v-model="ruleForm.type" label="a">备选项</el-radio>
+        <el-radio v-model="ruleForm.type" label="browser">浏览器</el-radio>
       </el-form-item>
       <el-form-item label="文章名称" prop="name">
         <el-input v-model="ruleForm.name"></el-input>
@@ -55,6 +55,8 @@
     },
     beforeMount(){
       this.MarkDown = new Showdown.Converter({tables: true, strikethrough: true})
+      // this.MarkDown.setFlavor('github');
+      console.log(this.MarkDown.getOptions())
       // this.MarkDown.setOption('tables', true);
       // console.log(this.MarkDown.getOption('tables'))
     },

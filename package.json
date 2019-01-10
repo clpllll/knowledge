@@ -13,6 +13,7 @@
     "showdown": "^1.9.0",
     "vue": "^2.5.17",
     "vue-router": "^3.0.1",
+    "wangeditor": "^3.1.1",
     "webpack-chain": "^5.0.1"
   },
   "devDependencies": {
