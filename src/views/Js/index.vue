@@ -114,6 +114,12 @@ const Showdown = require('showdown')
 .knowledge{
   padding:10px 1.5rem;
   .item{
+    margin-bottom: 50px;
+    >a{
+      font-size: 22px;
+      color:#000;
+      font-weight: 700;
+    }
     span{
       i{
         cursor: pointer;
