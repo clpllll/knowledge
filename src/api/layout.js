@@ -13,6 +13,13 @@ export const setArticle = (params) => {
     data:params
   })
 }
+export const patchArticle = (params) => {
+  return Fetch({
+    url: "/article",
+    method: 'patch',
+    data:params
+  })
+}
 export const getArticle = (params) => {
   return Fetch({
     url: "/article",

@@ -12,7 +12,8 @@ const reqe = (err) => {
   console.log('err',err)
 }
 const ress = (conf) => {
-  return conf
+  // console.log(conf)
+  return conf.data
 }
 const rese = (err) => {
   console.log('err',err)

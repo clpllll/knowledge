@@ -53,7 +53,7 @@ import { getCategory } from '@/api/layout';
       },
       getList(){
         getCategory().then(res=>{
-          // console.log('get',res)
+          console.log('get',res)
           this.data = res.data;
         })
       }
