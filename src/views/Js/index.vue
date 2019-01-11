@@ -9,23 +9,30 @@
           <i class="el-icon-delete" @click="(event)=>del(event,item._id)"></i>
         </span>
       </a>
+      <!-- <svg-icon iconName="copy"></svg-icon> -->
       <p v-html="item.content" v-highlight> </p>
     </div>
     <el-dialog
       title="update"
       :visible.sync="dialogVisible"
       width="70%">
-      <div v-html="updateObj.content"> </div>
+      <el-input v-model="updateObj.name" placeholder="请输入内容"></el-input>
+      <el-input
+        type="textarea"
+        :rows="11"
+        placeholder="请输入内容"
+        v-model="updateObj.content">
+      </el-input>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+        <el-button type="primary" @click="update(updateObj)">确 定</el-button>
       </span>
     </el-dialog>
   </div>
 </template>
 <script>
 import Nav from '../Navbar'
-import { getArticle } from '@/api/layout.js'
+import { getArticle, patchArticle } from '@/api/layout.js'
 import { getToken }from '@/util/token.js';
 const Showdown = require('showdown')
   export default {
@@ -37,12 +44,14 @@ const Showdown = require('showdown')
         token:false,
         updateObj:{},
         type:"",
+        MarkDown:null,
       }
     },
     beforeMount(){
       const { path } = this.$route;
-      const type = path.replace('/','')
-      this.getList(type)
+      this.type = path.replace('/','')
+      this.getList()
+      this.MarkDown = new Showdown.Converter()
     },
     
     mounted(){
@@ -59,8 +68,8 @@ const Showdown = require('showdown')
         }else {
           console.log(to)
           const { path } = this.$route;
-          const type = path.replace('/','')
-          this.getList(type)
+          this.type = path.replace('/','')
+          this.getList()
           this.main.scrollTop = 0;
         }
       }
@@ -72,18 +81,23 @@ const Showdown = require('showdown')
       // }
     },
     methods:{
-      getList(type){
+      getList(){
+        const { type } = this;
         getArticle({type}).then(res=>{
-          // console.log('getArticle',res)
-          this.list = res.data;
+          console.log('getArticle',res)
+          if(res.code===200){
+            this.list = res.data;
+          }
         })
       },
       edit(e,item){
         e.stopPropagation()
         e.preventDefault()
         this.dialogVisible = true;
-        console.log(item.name)
-        this.updateObj = item;
+        // console.log(item)
+        this.updateObj.name = this.MarkDown.makeMarkdown(item.name);
+        this.updateObj.content = this.MarkDown.makeMarkdown(item.content);
+        this.updateObj._id = item._id;
       },
       del(e,id){
         e.stopPropagation()
@@ -103,6 +117,16 @@ const Showdown = require('showdown')
       },
       setId(str){
         return str.replace(/,|\.|\+|!|=|\s+/g,'')
+      },
+      update(item){
+        const obj = Object.assign({},item);
+        obj.content = this.MarkDown.makeHtml(item.content);
+        obj.type = this.type;
+        console.log(obj)
+        patchArticle(obj).then(res=>{
+          console.log('put',res)
+        })
+        // this.dialogVisible = false;
       }
     },
     components:{

@@ -11,6 +11,7 @@ hljs.registerLanguage('javascript', javascript);
 import 'highlight.js/styles/railscasts.css';
 // import 'highlight.js/styles/tomorrow-night-eighties.css';
 import './style/markDown.less';
+import '@/views/Icons'
 Vue.use(ElementUi)
 Vue.config.productionTip = false;
 Vue.directive('anchor', {

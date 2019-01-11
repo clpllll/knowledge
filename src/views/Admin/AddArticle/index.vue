@@ -57,8 +57,7 @@
     beforeMount(){
       this.MarkDown = new Showdown.Converter({tables: true, strikethrough: true})
       // this.MarkDown.setFlavor('github');
-      console.log(this.MarkDown.getOptions())
-      // this.MarkDown.setOption('tables', true);
+      // console.log(this.MarkDown.getOptions())
       // console.log(this.MarkDown.getOption('tables'))
     },
     methods: {
