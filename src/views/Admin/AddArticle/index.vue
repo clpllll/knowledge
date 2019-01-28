@@ -56,8 +56,9 @@
     },
     beforeMount(){
       this.MarkDown = new Showdown.Converter({tables: true, strikethrough: true})
+      // disableForced4SpacesIndentedSublists:true
       // this.MarkDown.setFlavor('github');
-      // console.log(this.MarkDown.getOptions())
+      console.log(this.MarkDown.getOptions())
       // console.log(this.MarkDown.getOption('tables'))
     },
     methods: {

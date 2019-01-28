@@ -1,8 +1,8 @@
 <template>
-  <div class="knowledge">
+  <div class="knowledge"  v-loading.fullscreen="loading">
     <transition name="fade" mode="out-in">
     </transition>
-    <div  v-for="item in list" :key="item._id"  class="item">
+    <div  v-for="item in list" :key="item._id" class="item">
       <a :href="'#'+item.name" :id="setId(item.name)"> {{item.name}}
         <span v-show="token">
           <i class="el-icon-edit" @click="(event)=>edit(event,item)"></i>
@@ -15,6 +15,7 @@
     <el-dialog
       title="update"
       :visible.sync="dialogVisible"
+      :close-on-click-modal="false"
       width="70%">
       <el-input v-model="updateObj.name" placeholder="请输入内容"></el-input>
       <el-input
@@ -45,19 +46,32 @@ const Showdown = require('showdown')
         updateObj:{},
         type:"",
         MarkDown:null,
+        loading:false,
       }
     },
     beforeMount(){
       const { path } = this.$route;
       this.type = path.replace('/','')
       this.getList()
-      this.MarkDown = new Showdown.Converter()
+      this.MarkDown = new Showdown.Converter({
+        disableForced4SpacesIndentedSublists:true
+        })
+            // disableForced4SpacesIndentedSublists:true
+      // this.MarkDown.setFlavor('github');
+      console.log(this.MarkDown.getOptions())
     },
     
     mounted(){
       this.token = !!getToken();
       this.main = document.querySelector('.main');
+      const id = this.$route.hash;
+      if(id) this.$nextTick(()=>{
+        setTimeout(()=>{
+          this.goAnchor(this.setId(decodeURIComponent(id)))
+          },0)
+        })
     },
+    
     computed:{
     },
     watch:{
@@ -66,28 +80,23 @@ const Showdown = require('showdown')
           const id = this.setId(decodeURIComponent(to.hash))
           this.goAnchor(id)
         }else {
-          console.log(to)
           const { path } = this.$route;
           this.type = path.replace('/','')
           this.getList()
           this.main.scrollTop = 0;
         }
-      }
-    },
-    filters:{
-      // ff:(value)=>{
-      //   console.log("value")
-      //   return value
-      // }
+      },
     },
     methods:{
       getList(){
         const { type } = this;
+        this.loading= true;
         getArticle({type}).then(res=>{
-          console.log('getArticle',res)
-          if(res.code===200){
-            this.list = res.data;
-          }
+          // console.log('getArticle',res)
+          this.list = res.code===200?res.data||[]:[];
+          // setTimeout(()=>{
+          this.loading = false;
+          // },0)
         })
       },
       edit(e,item){
@@ -104,16 +113,9 @@ const Showdown = require('showdown')
         e.preventDefault()
         console.log(id)
       },
-      // handleClose(done) {
-      //   this.$confirm('确认关闭？')
-      //     .then(_ => {
-      //       done();
-      //     })
-      //     .catch(_ => {});
-      // },
       goAnchor(selector) {
         const anchor = document.querySelector(selector)
-        this.main.scrollTop = anchor.offsetTop - 50;
+        this.main.scrollTop = anchor.offsetTop - 60;
       },
       setId(str){
         return str.replace(/,|\.|\+|!|=|\s+/g,'')
@@ -122,11 +124,13 @@ const Showdown = require('showdown')
         const obj = Object.assign({},item);
         obj.content = this.MarkDown.makeHtml(item.content);
         obj.type = this.type;
-        console.log(obj)
         patchArticle(obj).then(res=>{
-          console.log('put',res)
+          // console.log('put',res)
+          if(res.code===200){
+            this.dialogVisible = false;
+            this.getList();
+          }
         })
-        // this.dialogVisible = false;
       }
     },
     components:{

@@ -8,6 +8,7 @@
     :accordion="true"
     :default-expanded-keys="defaultKey"
     @node-click="handleNodeClick"
+    @node-expand="aa"
     ref="treeBox"
 >
     </el-tree>
@@ -53,9 +54,12 @@ import { getCategory } from '@/api/layout';
       },
       getList(){
         getCategory().then(res=>{
-          console.log('get',res)
+          // console.log('get',res)
           this.data = res.data;
         })
+      },
+      aa(){
+        console.log('click')
       }
     }
   }
