@@ -51,14 +51,15 @@ const Showdown = require('showdown')
     },
     beforeMount(){
       const { path } = this.$route;
-      this.type = path.replace('/','')
+      // this.type = path.replace('/','')
+      this.type = path.split('/')[2]
       this.getList()
       this.MarkDown = new Showdown.Converter({
         disableForced4SpacesIndentedSublists:true
         })
             // disableForced4SpacesIndentedSublists:true
       // this.MarkDown.setFlavor('github');
-      console.log(this.MarkDown.getOptions())
+      // console.log(this.MarkDown.getOptions())
     },
     
     mounted(){
@@ -81,7 +82,8 @@ const Showdown = require('showdown')
           this.goAnchor(id)
         }else {
           const { path } = this.$route;
-          this.type = path.replace('/','')
+          this.type = path.split('/')[2];
+          // this.type = path.replace('/','')
           this.getList()
           this.main.scrollTop = 0;
         }
@@ -93,10 +95,8 @@ const Showdown = require('showdown')
         this.loading= true;
         getArticle({type}).then(res=>{
           // console.log('getArticle',res)
-          this.list = res.code===200?res.data||[]:[];
-          // setTimeout(()=>{
           this.loading = false;
-          // },0)
+          this.list = res?res.data:[];
         })
       },
       edit(e,item){
@@ -111,7 +111,7 @@ const Showdown = require('showdown')
       del(e,id){
         e.stopPropagation()
         e.preventDefault()
-        console.log(id)
+        // console.log(id)
       },
       goAnchor(selector) {
         const anchor = document.querySelector(selector)
@@ -126,10 +126,8 @@ const Showdown = require('showdown')
         obj.type = this.type;
         patchArticle(obj).then(res=>{
           // console.log('put',res)
-          if(res.code===200){
             this.dialogVisible = false;
-            this.getList();
-          }
+            res&&this.getList();
         })
       }
     },

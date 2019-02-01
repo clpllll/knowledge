@@ -1,5 +1,5 @@
 <template>
-  <svg class="icon">
+  <svg class="icon" @click="handleClick">
     <use :xlink:href="'#icon-'+iconName"></use>
   </svg>
 </template>
@@ -11,8 +11,10 @@ export default {
       default:''
     }
   },
-  mounted(){
-    console.log('aaa',this.iconName)
+  methods:{
+    handleClick(){
+      this.$emit('click')
+    }
   }
 }
 </script> 

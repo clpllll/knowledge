@@ -4,22 +4,31 @@
     <nav>
       <div class="search"><input type="text"></div>
       <ul>
-        <li v-for="item in navList" :key="Object.values(item)[0]">{{Object.keys(item)[0]}}</li>
+        <li v-for="item in navList" 
+        :key="item.value"  @click="handleClick(item.value)">
+          {{item.label}}
+        </li>
       </ul>
     </nav>
   </header>
 </template>
 <script>
-import '../../api/layout'
+import {getGeneralities} from '../../api/layout';
   export default {
     data(){
       return{
-        navList:[
-          {'前端':'front'},
-          {'计算机通识':'computers'},
-          {'职业':'job'},
-          {'关于我们':'about'}
-          ]
+        navList:[]
+      }
+    },
+    beforeMount(){
+      getGeneralities().then(res=>{
+        console.log('getGeneralities',res)
+        this.navList = res?res.data:[];
+      })
+    },
+    methods:{
+      handleClick(data){
+        this.$router.push({ path: '/'+data })
       }
     }
   }

@@ -29,14 +29,23 @@ import { getCategory } from '@/api/layout';
     },
     mounted() {
       let { path, hash } = this.$route;
-      path = path.replace('/','')
+      const [category,key] = path.replace('/','').split('/')
       hash = hash?decodeURIComponent(this.$route.hash).replace('#',''):null;
-      this.defaultKey = [path];
-      this.getList()
+      this.defaultKey = [key];
+      this.getList(category)
       this.$nextTick(() => {
         this.$refs.treeBox.setCurrentKey(hash); 
         // treeBox 元素的ref   value 绑定的node-key
       });
+    },
+    watch:{
+      $route(to,from){
+        if(to.redirectedFrom&&to.redirectedFrom!==from.redirectedFrom){
+          const [category,key] = to.path.replace('/','').split('/')
+          this.getList(category);
+          this.defaultKey=[key]
+        }
+      }
     },
     computed:{
       dataList(){
@@ -52,10 +61,10 @@ import { getCategory } from '@/api/layout';
         // console.log(parent,title);
         this.$router.push(parent?parent+'#'+title:title)
       },
-      getList(){
-        getCategory().then(res=>{
+      getList(category="front"){
+        getCategory({category}).then(res=>{
           // console.log('get',res)
-          this.data = res.data;
+          this.data = res?res.data:[];
         })
       },
       aa(){

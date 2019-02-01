@@ -7,7 +7,7 @@ import AddArticle from '../views/Admin/AddArticle'
 const _import = ((mode) => {
   if (mode === 'development') {
     return (path) => {
-      return require(`../views/${path}`).default
+      return require(`../views/${path}`).default  
       }
   } else {
     return (path) => {
@@ -15,7 +15,8 @@ const _import = ((mode) => {
     }
   }
 })(process.env.NODE_ENV)
-
+const content = _import('Front');
+const layout = _import('Layout');
 const AdminRoutes = [
   {
     path: "/admin",
@@ -29,26 +30,52 @@ const AdminRoutes = [
 const routes = [
   { path: '/hello', component: hello },
   {
-    path: '/',
-    component: _import('Layout'),
+    path: '/front/',
+    redirect: '/front/js',
+    component: layout,
     children: [
       {
-        path: 'js/',
-        component: _import('Js'),
+        path: 'js',
+        component: content,
       },
       {
-        path: '/browser',
-        component: _import('Js'),
+        path: 'browser',
+        component: content,
       }
     ]
-  },
-  // {
-  //   path: '/layout',
-  //   component: _import('Layout'),
-  //   children: [
-  //     {path:'js',component:_import('Js')}
-  //   ]
-  // },
+  }, {
+    path: '/serve/',
+    redirect: '/serve/koa',
+    component: layout,
+    children: [
+      {
+        path: 'koa',
+        component: content,
+      }
+    ]
+  }, {
+    path: '/computers/',
+    redirect: '/computers/regexp',
+    component: layout,
+    children: [
+      {
+        path: 'regexp',
+        component: content,
+      },
+      {
+        path: 'markdown',
+        component: content,
+      },
+      {
+        path: 'git',
+        component: content,
+      }
+    ]
+  }, {
+    path: '/',
+    redirect: '/front/js',
+  }
+  
   
 ]
 const router = new Router({

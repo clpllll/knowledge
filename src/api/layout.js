@@ -1,9 +1,9 @@
 import Fetch from '@/util/fetch.js'
-// console.log(Fetch)
-export const getCategory = () => {
+export const getCategory = (params) => {
   return Fetch({
     url: "/category",
-    method: 'get'
+    method: 'get',
+    params
   })
 }
 export const setArticle = (params) => {
@@ -30,6 +30,12 @@ export const getArticle = (params) => {
 export const getTitle = () => {
   return Fetch({
     url: "/title",
-    method: 'get'
+    method: 'get',
+  })
+}
+export const getGeneralities = () => {
+  return Fetch({
+    url: "/generalities",
+    method: 'get',
   })
 }

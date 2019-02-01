@@ -16,7 +16,7 @@
     },
     methods:{
       getList(){
-        getTitle().then(res=> this.list = res.data)
+        getTitle().then(res=> this.list = res?res.data:[])
       }
     }
   }
