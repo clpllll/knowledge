@@ -78,8 +78,17 @@ const Showdown = require('showdown')
     watch:{
       $route(to,from) {
         if(to.hash) {
-          const id = this.setId(decodeURIComponent(to.hash))
-          this.goAnchor(id)
+          if(to.path===from.path){
+            const id = this.setId(decodeURIComponent(to.hash))
+            this.goAnchor(id)
+          }else{
+            const { path } = this.$route;
+            this.type = path.split('/')[2];
+            this.getList(()=>{
+              const id = this.setId(decodeURIComponent(to.hash))
+              this.goAnchor(id)
+            })
+          }
         }else {
           const { path } = this.$route;
           this.type = path.split('/')[2];
@@ -90,13 +99,16 @@ const Showdown = require('showdown')
       },
     },
     methods:{
-      getList(){
+      getList(callback){
         const { type } = this;
         this.loading= true;
         getArticle({type}).then(res=>{
           // console.log('getArticle',res)
           this.loading = false;
           this.list = res?res.data:[];
+          callback&&setTimeout(()=>{
+            callback()
+          },0)
         })
       },
       edit(e,item){
@@ -114,7 +126,7 @@ const Showdown = require('showdown')
         // console.log(id)
       },
       goAnchor(selector) {
-        const anchor = document.querySelector(selector)
+        const anchor = document.querySelector(selector)
         this.main.scrollTop = anchor.offsetTop - 60;
       },
       setId(str){

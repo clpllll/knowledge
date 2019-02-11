@@ -4,6 +4,7 @@ Vue.use(Router)
 import hello from '../components/HelloWorld.vue'
 import Admin from '../views/Admin'
 import AddArticle from '../views/Admin/AddArticle'
+import noFount from '../views/404'
 const _import = ((mode) => {
   if (mode === 'development') {
     return (path) => {
@@ -74,6 +75,9 @@ const routes = [
   }, {
     path: '/',
     redirect: '/front/js',
+  },{
+    path: '*',
+    component:noFount
   }
   
   

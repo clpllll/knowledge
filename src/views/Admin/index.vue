@@ -51,7 +51,6 @@ import { setToken } from '@/util/token';
 export default {
   data() {
     const validatorP = (rule, value, callback) => {
-      console.log("validatorP");
       if (value === "") {
         callback(new Error("请再次输入密码"));
       } else if (value !== this.ruleForm.password) {
@@ -82,7 +81,6 @@ export default {
         if (valid) {
           const obj = Object.assign({}, this.ruleForm);
           obj.password = encrypt(obj.password);
-          console.log(this.ruleForm);
           if(type==='login'){
             login(obj).then(res=>{
               console.log(type,res)

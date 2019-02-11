@@ -40,11 +40,11 @@ import { getCategory } from '@/api/layout';
     },
     watch:{
       $route(to,from){
-        if(to.redirectedFrom&&to.redirectedFrom!==from.redirectedFrom){
+        if(!to.redirectedFrom||to.redirectedFrom!==from.redirectedFrom){
           const [category,key] = to.path.replace('/','').split('/')
           this.getList(category);
           this.defaultKey=[key]
-        }
+        }else if(false){}
       }
     },
     computed:{

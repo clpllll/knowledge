@@ -128,7 +128,7 @@ export default {
           const obj = Object.assign({}, this.ruleForm);
           obj.content = this.content;
           setArticle(obj).then(res => {
-            console.log('add',res)
+            // console.log('add',res)
             res&&this.$router.push(`/${this.ruleForm.category}`);
           });
         } else {
@@ -139,7 +139,7 @@ export default {
     },
     getGeneralities(){
       getGeneralities().then(res=>{
-        console.log('getGeneralities',res)
+        // console.log('getGeneralities',res)
         this.navList = res?res.data:{};
       })
     },
