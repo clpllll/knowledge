@@ -19,7 +19,7 @@
         <el-form-item>
           <el-button type="primary" @click="submitForm('ruleForm','login')">提交</el-button>
           <el-button @click="resetForm('ruleForm')">重置</el-button>
-          <el-button @click="changeFrom('register','ruleForm')">注册</el-button>
+          <!-- <el-button @click="changeFrom('register','ruleForm')">注册</el-button> -->
         </el-form-item>
       </el-form>
     </div>
@@ -47,7 +47,8 @@
 <script>
 import { login, register, getInfo } from "@/api/login.js";
 import encrypt from "./encrypt.js";
-import { setToken } from '@/util/token';
+import { setToken, getToken } from '@/util/token';
+import { mapMutations } from 'vuex'
 export default {
   data() {
     const validatorP = (rule, value, callback) => {
@@ -60,7 +61,7 @@ export default {
       }
     };
     return {
-      type: "register",
+      type: "login",
       ruleForm: { name: "", password: "", password2: "" },
       rules: {
         name: [
@@ -72,10 +73,25 @@ export default {
           { min: 3, max: 8, message: "长度在 3 到 8 个字符", trigger: "blur" }
         ],
         password2: [{ validator: validatorP, trigger: "blur" }]
-      }
+      },
+      path:''
     };
   },
-  methods: {
+  beforeRouteEnter (to, from, next) {
+    // 在渲染该组件的对应路由被 confirm 前调用
+    // 不！能！获取组件实例 `this`
+    // 因为当守卫执行前，组件实例还没被创建
+    next(vm => {
+      vm.setPath(from.path)
+    })
+  },
+  beforeMount(){
+    if(getToken()) this.$router.push({path:'/'})
+  },
+  methods: {     
+    ...mapMutations([
+      'setFlagToken'
+    ]),
     submitForm(formName,type) {
       this.$refs[formName].validate(valid => {
         if (valid) {
@@ -83,11 +99,14 @@ export default {
           obj.password = encrypt(obj.password);
           if(type==='login'){
             login(obj).then(res=>{
-              console.log(type,res)
+              // console.log(type,res)
+              if(!res)return;
               setToken(res.data.token);
-              getInfo().then(res=>{
-                console.log('getInfo',res)
-              })
+              this.setFlagToken(true)
+              this.$router.push({path:this.path||'/'})
+              // getInfo().then(res=>{
+              //   console.log('getInfo',res)
+              // })
             })
             return
           }
@@ -107,6 +126,9 @@ export default {
     changeFrom(type, formName) {
       this.type = type;
       this.resetForm(formName);
+    },
+    setPath(path){
+      this.path = path
     }
   }
 };

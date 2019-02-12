@@ -8,7 +8,6 @@
     :accordion="true"
     :default-expanded-keys="defaultKey"
     @node-click="handleNodeClick"
-    @node-expand="aa"
     ref="treeBox"
 >
     </el-tree>
@@ -40,11 +39,18 @@ import { getCategory } from '@/api/layout';
     },
     watch:{
       $route(to,from){
-        if(!to.redirectedFrom||to.redirectedFrom!==from.redirectedFrom){
+        if(!to.redirectedFrom){
+          const [toCategory,key] = to.path.replace('/','').split('/');
+          const [fromCategory] = from.path.replace('/','').split('/');
+          if(toCategory!==fromCategory){
+            this.getList(toCategory);
+            this.defaultKey=[key];
+          }
+        }else if(to.redirectedFrom!==from.redirectedFrom){
           const [category,key] = to.path.replace('/','').split('/')
           this.getList(category);
           this.defaultKey=[key]
-        }else if(false){}
+        }
       }
     },
     computed:{
@@ -67,9 +73,6 @@ import { getCategory } from '@/api/layout';
           this.data = res?res.data:[];
         })
       },
-      aa(){
-        console.log('click')
-      }
     }
   }
 </script> 

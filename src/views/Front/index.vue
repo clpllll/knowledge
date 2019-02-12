@@ -4,12 +4,11 @@
     </transition>
     <div  v-for="item in list" :key="item._id" class="item">
       <a :href="'#'+item.name" :id="setId(item.name)"> {{item.name}}
-        <span v-show="token">
+        <span v-show="flagToken">
           <i class="el-icon-edit" @click="(event)=>edit(event,item)"></i>
           <i class="el-icon-delete" @click="(event)=>del(event,item._id)"></i>
         </span>
       </a>
-      <!-- <svg-icon iconName="copy"></svg-icon> -->
       <p v-html="item.content" v-highlight> </p>
     </div>
     <el-dialog
@@ -29,12 +28,23 @@
         <el-button type="primary" @click="update(updateObj)">确 定</el-button>
       </span>
     </el-dialog>
+    <el-dialog
+      title="提示"
+      :visible.sync="reloadLogin"
+      width="50%">
+      <span>已登出，重新登录</span>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="reloadLogin = false">取 消</el-button>
+        <el-button type="primary" @click="toAdmin">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script>
 import Nav from '../Navbar'
 import { getArticle, patchArticle } from '@/api/layout.js'
 import { getToken }from '@/util/token.js';
+import { mapMutations, mapState } from 'vuex'
 const Showdown = require('showdown')
   export default {
     data(){
@@ -42,7 +52,7 @@ const Showdown = require('showdown')
         main:null,
         list:[],
         dialogVisible:false,
-        token:false,
+        reloadLogin:false,
         updateObj:{},
         type:"",
         MarkDown:null,
@@ -51,7 +61,6 @@ const Showdown = require('showdown')
     },
     beforeMount(){
       const { path } = this.$route;
-      // this.type = path.replace('/','')
       this.type = path.split('/')[2]
       this.getList()
       this.MarkDown = new Showdown.Converter({
@@ -63,7 +72,6 @@ const Showdown = require('showdown')
     },
     
     mounted(){
-      this.token = !!getToken();
       this.main = document.querySelector('.main');
       const id = this.$route.hash;
       if(id) this.$nextTick(()=>{
@@ -72,9 +80,7 @@ const Showdown = require('showdown')
           },0)
         })
     },
-    
-    computed:{
-    },
+    computed:mapState(['flagToken']),
     watch:{
       $route(to,from) {
         if(to.hash) {
@@ -92,13 +98,15 @@ const Showdown = require('showdown')
         }else {
           const { path } = this.$route;
           this.type = path.split('/')[2];
-          // this.type = path.replace('/','')
           this.getList()
           this.main.scrollTop = 0;
         }
       },
     },
     methods:{
+      ...mapMutations([
+        'remove_token',
+      ]),
       getList(callback){
         const { type } = this;
         this.loading= true;
@@ -114,8 +122,12 @@ const Showdown = require('showdown')
       edit(e,item){
         e.stopPropagation()
         e.preventDefault()
+        this.remove_token(new Date().getTime())
+        if(!this.flagToken) {
+          this.reloadLogin = true;
+          return;
+        }
         this.dialogVisible = true;
-        // console.log(item)
         this.updateObj.name = this.MarkDown.makeMarkdown(item.name);
         this.updateObj.content = this.MarkDown.makeMarkdown(item.content);
         this.updateObj._id = item._id;
@@ -137,10 +149,13 @@ const Showdown = require('showdown')
         obj.content = this.MarkDown.makeHtml(item.content);
         obj.type = this.type;
         patchArticle(obj).then(res=>{
-          // console.log('put',res)
             this.dialogVisible = false;
             res&&this.getList();
         })
+      },
+      toAdmin(){
+        this.$router.push({path:'/admin'});
+        this.reloadLogin = false;
       }
     },
     components:{
