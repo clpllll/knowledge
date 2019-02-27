@@ -2,24 +2,77 @@
   <header class="navbar">
     <div class="logo">InterviewMap</div>
     <nav>
-      <div class="search"><input type="text"></div>
+      <div class="search">
+        <svg-icon iconName="search" v-if="!flagSearch" @click="changeSearch"/>
+        <el-select
+          v-else
+          size="small"
+          @change="select"
+          v-model="search"
+          filterable
+          remote
+          reserve-keyword
+          placeholder="请输入关键词"
+          :remote-method="remoteMethod"
+          :loading="loading">
+          <el-option
+            v-for="item in searchOptions"
+            :key="item._id"
+            :label="item.type+' -> '+item.title"
+            :value="[item.category,item.title,item.type]">
+          </el-option>
+        </el-select>
+      </div>
       <ul>
-        <li v-for="item in navList" :key="Object.values(item)[0]">{{Object.keys(item)[0]}}</li>
+        <li v-for="item in navList" 
+        :key="item.value"  @click="handleClick(item.value)">
+          {{item.label}}
+        </li>
       </ul>
     </nav>
   </header>
 </template>
 <script>
-import '../../api/layout'
+import { getGeneralities } from '@/api/layout';
+import { getSearch } from '@/api/search';
   export default {
     data(){
       return{
-        navList:[
-          {'前端':'front'},
-          {'计算机通识':'computers'},
-          {'职业':'job'},
-          {'关于我们':'about'}
-          ]
+        navList:[],
+        flagSearch:false,
+        search:'',
+        searchOptions:[],
+        loading:false,
+      }
+    },
+    beforeMount(){
+      getGeneralities().then(res=>{
+        // console.log('getGeneralities',res)
+        this.navList = res?res.data:[];
+      })
+    },
+    methods:{
+      handleClick(data){
+        this.$router.push({ path: '/'+data })
+      },
+      changeSearch(){
+        this.flagSearch=true;
+      },
+      remoteMethod(query) {
+        // console.log('query',query)
+        if(!query)return
+        this.loading=true;
+        getSearch({key:query}).then(res=>{
+          // console.log('search',res.data)
+          this.loading = false;
+          this.searchOptions = res?res.data:[]; 
+        })
+      },
+      select(){
+        const [category,title,type] = this.search
+        this.$router.push({ path: `/${type}/${category}#${title}`})
+        this.search = "";
+        this.flagSearch=false;
       }
     }
   }
@@ -50,6 +103,7 @@ import '../../api/layout'
         }
       }
       .search{
+        cursor: pointer;
         margin-right:30px;
         input{
           height: 25px;
@@ -59,6 +113,10 @@ import '../../api/layout'
           &:focus{
             outline: none;
           }
+        }
+        .icon{
+          font-size: 20px;
+          color:#ccc;
         }
       }
     }
