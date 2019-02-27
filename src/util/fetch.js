@@ -7,8 +7,10 @@ const serve = Axios.create({
   timeout: 1000 * 60 * 3,
 })
 const reqs = (conf) => {
-  store.commit("setTime",new Date().getTime())
-  if(getToken())conf.headers= {'X-Auth-token': getToken()}
+  if (getToken()) {
+    store.commit("setTime", new Date().getTime())
+    conf.headers = { 'X-Auth-token': getToken() }
+  }
   return conf
 }
 const reqe = (err) => {

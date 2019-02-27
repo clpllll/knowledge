@@ -64,7 +64,9 @@ const Showdown = require('showdown')
       this.type = path.split('/')[2]
       this.getList()
       this.MarkDown = new Showdown.Converter({
-        disableForced4SpacesIndentedSublists:true
+        disableForced4SpacesIndentedSublists:true,
+        tables: true,
+        strikethrough: true
         })
             // disableForced4SpacesIndentedSublists:true
       // this.MarkDown.setFlavor('github');

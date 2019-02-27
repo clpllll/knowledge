@@ -9,18 +9,18 @@ const store = new Vuex.Store({
     flagToken:false,
   },
   mutations: {
-    setFlagToken(state,token) {
-      state.flagToken = token
+    setFlagToken(state, token) {
+      state.flagToken = token;
+      state.time = new Date().getTime();
     },
     setTime(state, time) {
-      state.time = time
+      if (state.flagToken) {
+        const halfHour = 60 * 1000 * 30;
+        state.flagToken = !(time - state.time >= halfHour) ;
+        if (time - state.time >= halfHour) removeToken()
+      }
+      state.time = time;
     },
-    remove_token(state, time) {
-      // const halfHour = 10000;
-      const halfHour = 60 * 1000 * 30;
-      state.flagToken = time - state.time >= halfHour ? false : true;
-      removeToken()
-    }
   },
   actions: {
     

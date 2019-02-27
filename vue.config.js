@@ -1,5 +1,5 @@
 const proxy = require('./proxy');
-const conf = require('./webpack.core')
+// const conf = require('./webpack.core')
 const path = require('path');
 const resolve = (dir)=>{
   return path.join(__dirname,'.',dir)

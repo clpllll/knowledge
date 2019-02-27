@@ -5,6 +5,9 @@ import hello from '../components/HelloWorld.vue'
 import Admin from '../views/Admin'
 import AddArticle from '../views/Admin/AddArticle'
 import noFount from '../views/404'
+import content from '../views/Front';
+import layout from '../views/Layout';
+/*
 const _import = ((mode) => {
   if (mode === 'development') {
     return (path) => {
@@ -18,6 +21,7 @@ const _import = ((mode) => {
 })(process.env.NODE_ENV)
 const content = _import('Front');
 const layout = _import('Layout');
+*/
 const AdminRoutes = [
   {
     path: "/admin",
@@ -69,6 +73,10 @@ const routes = [
       },
       {
         path: 'git',
+        component: content,
+      },
+      {
+        path: 'linux',
         component: content,
       }
     ]
