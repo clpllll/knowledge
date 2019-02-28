@@ -26,9 +26,12 @@ Vue.directive('anchor', {
 })
 Vue.directive('highlight',function (el) {
   let blocks = el.querySelectorAll('pre code');
-  blocks.forEach((block)=>{
+  // blocks.forEach((block)=>{
+  //   hljs.highlightBlock(block)
+  // })
+  for (const block of blocks) {
     hljs.highlightBlock(block)
-  })
+  }
 })
 new Vue({
   router,
