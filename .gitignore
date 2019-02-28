@@ -21,3 +21,4 @@ yarn-error.log*
 *.sw*
 serve/*.sh
 serve/*.out
+dist/
