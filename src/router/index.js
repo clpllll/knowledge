@@ -81,6 +81,16 @@ const routes = [
       }
     ]
   }, {
+    path: '/tools/',
+    redirect: '/tools/tools',
+    component: layout,
+    children: [
+      {
+        path: 'tools',
+        component: content,
+      }
+    ]
+  }, {
     path: '/',
     redirect: '/front/js',
   },{

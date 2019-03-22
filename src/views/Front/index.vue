@@ -104,11 +104,14 @@ const Showdown = require('showdown')
           this.main.scrollTop = 0;
         }
       },
+      dialogVisible(a,b){
+        console.log('dialogVisible',a,b)
+      }
     },
     methods:{
-      ...mapMutations([
-        'remove_token',
-      ]),
+      // ...mapMutations([
+      //   'remove_token',
+      // ]),
       getList(callback){
         const { type } = this;
         this.loading= true;
@@ -124,7 +127,8 @@ const Showdown = require('showdown')
       edit(e,item){
         e.stopPropagation()
         e.preventDefault()
-        this.remove_token(new Date().getTime())
+        // this.remove_token(new Date().getTime())
+        console.log(this.flagToken)
         if(!this.flagToken) {
           this.reloadLogin = true;
           return;
@@ -152,7 +156,7 @@ const Showdown = require('showdown')
         obj.type = this.type;
         patchArticle(obj).then(res=>{
             this.dialogVisible = false;
-            res&&this.getList();
+            if(res)this.getList();
         })
       },
       toAdmin(){
